@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "616872939577",
+    "project_id": "studentget-6721b",
+    "storage_bucket": "studentget-6721b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616872939577:android:c0e28b5fe41862b1003de8",
+        "android_client_info": {
+          "package_name": "com.example.studentmanagementgetx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoUY1tuSRbOj30p5bIdnZSnyDelGiaNEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
