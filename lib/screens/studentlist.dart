@@ -85,7 +85,7 @@ class StudentList extends StatelessWidget {
                             onTap: () {
                               Get.to(() => StudentDetails(
                                   student: studentModel, id: studentId));
-                            },
+                            },//test
                             child: Card(
                               elevation: 3,
                               color: const Color.fromARGB(255, 174, 158, 109),
