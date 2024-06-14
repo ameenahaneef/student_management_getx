@@ -10,12 +10,12 @@ import 'package:studentmanagementgetx/screens/editscreen.dart';
 class StudentDetails extends StatelessWidget {
   final StudentModel student;
   final String id;
-  final StudentController _studentController = Get.put(StudentController());
   StudentDetails({
     super.key,
     required this.student,
     required this.id,
   });
+  final StudentController _studentController = Get.put(StudentController());
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +73,7 @@ class StudentDetails extends StatelessWidget {
                       children: [
                         IconButton(
                             onPressed: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (ctx) {
-                                return EditScreen(
-                                  student: student,
-                                  id: id,
-                                );
-                              }));
+                              Get.to(EditScreen(student: student, id: id));
                             },
                             icon: const Icon(
                               Icons.edit,

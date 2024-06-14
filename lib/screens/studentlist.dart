@@ -24,6 +24,7 @@ class StudentList extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
+                
                   Get.to(() => HomeScreen());
                 },
                 icon: const Icon(

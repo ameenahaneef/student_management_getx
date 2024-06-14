@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -54,14 +56,11 @@ class HomeScreen extends StatelessWidget {
                     return CircleAvatar(
                       backgroundColor: Colors.amber,
                       radius: 70,
-                      backgroundImage:
-                          _studentController.imageFile.value != null &&
-                                  _studentController
-                                      .imageFile.value!.path.isNotEmpty
-                              ? FileImage(_studentController.imageFile.value!)
-                              : null,
-                      child: _studentController.imageFile.value == null ||
-                              _studentController.imageFile.value!.path.isEmpty
+                      backgroundImage: _studentController
+                              .imageFile.value.isNotEmpty
+                          ? FileImage(File(_studentController.imageFile.value))
+                          : null,
+                      child: _studentController.imageFile.value.isEmpty
                           ? const Icon(
                               Icons.camera_alt,
                               size: 40,
@@ -97,7 +96,7 @@ class HomeScreen extends StatelessWidget {
                             department: departmentController.text,
                             phoneno: phoneNumberController.text,
                             gender: genderController.text,
-                            imageUrl: _studentController.imageFile.value!.path,
+                            imageUrl: _studentController.imageFile.value,
                           ));
 
                           nameController.clear();
@@ -105,12 +104,18 @@ class HomeScreen extends StatelessWidget {
                           departmentController.clear();
                           phoneNumberController.clear();
                           genderController.clear();
-                          _studentController.clearImage();
-                          
-                          Get.snackbar('Added', 'Added successfully',backgroundColor: Colors.green,colorText: Colors.white);
+                          _studentController.imageFile.value = '';
+
+                          Get.snackbar('Added', 'Added successfully',
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white);
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return HomeScreen();
+                          }));
                         } else {
-                         
-                          Get.snackbar('', 'please fill all fields',backgroundColor: Colors.red,colorText: kWhite);
+                          Get.snackbar('', 'please fill all fields',
+                              backgroundColor: Colors.red, colorText: kWhite);
                         }
                       },
                       style: ElevatedButton.styleFrom(

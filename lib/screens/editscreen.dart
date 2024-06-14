@@ -4,33 +4,36 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:studentmanagementgetx/constants/constant.dart';
 import 'package:studentmanagementgetx/controller/studentcontroller.dart';
 import 'package:studentmanagementgetx/models/studentmodel.dart';
 import 'package:studentmanagementgetx/screens/studentlist.dart';
 
 class EditScreen extends StatelessWidget {
-final StudentModel student;
-final String id;
+  final StudentModel student;
+  final String id;
 
   EditScreen({
     super.key,
-     required this.student, required this.id,
-   
+    required this.student,
+    required this.id,
   });
-   final StudentController _studentController = Get.put(StudentController());
+  final StudentController _studentController = Get.put(StudentController());
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController(text: student.name);
-  final TextEditingController rollNumberController = TextEditingController(text: student.rollno);
-  final TextEditingController departmentController = TextEditingController(text: student.department);
-  final TextEditingController phoneNumberController = TextEditingController(text: student.phoneno);
-  final TextEditingController genderController = TextEditingController(text: student.gender);
-   
-  
-   _studentController.imageFile.value=File(student.imageUrl);
+    final TextEditingController nameController =
+        TextEditingController(text: student.name);
+    final TextEditingController rollNumberController =
+        TextEditingController(text: student.rollno);
+    final TextEditingController departmentController =
+        TextEditingController(text: student.department);
+    final TextEditingController phoneNumberController =
+        TextEditingController(text: student.phoneno);
+    final TextEditingController genderController =
+        TextEditingController(text: student.gender);
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -41,9 +44,7 @@ final String id;
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                    return StudentList();
-                  }));
+                  Get.to(StudentList());
                 },
                 icon: const Icon(
                   Icons.person,
@@ -57,26 +58,20 @@ final String id;
                 child: SingleChildScrollView(
                     child: Column(children: [
                   GestureDetector(
-                    onTap: () {
-                   _studentController.selectImageFromGallery();
-                    },
-                    child: Obx((){
-                    return CircleAvatar(
-                        backgroundColor: Colors.amber,
-                        radius: 70,
-                        backgroundImage: _studentController.imageFile.value!=null
-                            ? FileImage(_studentController.imageFile.value!)
-                            : null,
-                        child: _studentController.imageFile.value==null ? 
-                         const Icon(
-                                Icons.camera_alt,
-                                size: 40,
-                                color: kWhite,
-                              )
-                            : null
-                      );
-  }),
-                  ),
+                      onTap: () {
+                        _studentController.selectImageFromGallery();
+                      },
+                      child: Obx(
+                        () => CircleAvatar(
+                          backgroundColor: Colors.amber,
+                          radius: 70,
+                          backgroundImage:
+                              _studentController.imageFile.value.isNotEmpty
+                                  ? FileImage(
+                                      File(_studentController.imageFile.value))
+                                  : FileImage(File(student.imageUrl)),
+                        ),
+                      )),
                   kHeight,
                   textformfield('Name', nameController),
                   kHeight,
@@ -96,22 +91,26 @@ final String id;
                               backgroundColor: Colors.amber),
                           onPressed: () {
                             if (_formKey.currentState!.validate() &&
-                               _studentController.imageFile.value!=null) {
+                                    _studentController
+                                        .imageFile.value.isNotEmpty ||
+                                student.imageUrl.isNotEmpty) {
                               StudentModel updatedStudent = student.copyWith(
                                 name: nameController.text,
                                 rollno: rollNumberController.text,
                                 department: departmentController.text,
                                 phoneno: phoneNumberController.text,
                                 gender: genderController.text,
-                                imageUrl: _studentController.imageFile.value!.path,
+                                imageUrl: _studentController
+                                        .imageFile.value.isNotEmpty
+                                    ? _studentController.imageFile.value
+                                    : student.imageUrl,
                               );
 
-                              _studentController.updateStudent(id, updatedStudent);
+                              _studentController.updateStudent(
+                                  id, updatedStudent);
                               Get.snackbar('success', 'Changes saved');
-                               
-                            Get.off(StudentList());
-                               
 
+                              Get.off(StudentList());
                             }
                           },
                           child: const Text(

@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -8,28 +8,16 @@ import 'package:studentmanagementgetx/models/studentmodel.dart';
 const String studentCollectionRef = "student";
 
 class StudentController extends GetxController {
-  final Rx<File?> _imageFile = Rx<File?>(null);
+  final imageFile = ''.obs;
   String? _searchTxt;
   final _picker = ImagePicker();
-  Rx<File?> get imageFile => _imageFile;
-
-  Future<void> setImageFileAsync(File imageFile) async {
-    await Future.delayed(Duration.zero);
-    _imageFile.value = imageFile;
-    update();
-  }
 
   Future<void> selectImageFromGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      _imageFile.value = File(pickedFile.path);
+      imageFile.value = pickedFile.path.toString();
       update();
     }
-  }
-
-  void clearImage() {
-    _imageFile.value = File('');
-    update();
   }
 
   final _fireStore = FirebaseFirestore.instance;
@@ -55,8 +43,8 @@ class StudentController extends GetxController {
     return _studentRef.snapshots();
   }
 
-  void updateStudent(String studentId, StudentModel studentModel) {
-    _studentRef.doc(studentId).update(studentModel.tojson());
+  void updateStudent(String studentId, StudentModel studentModel) async {
+    await _studentRef.doc(studentId).update(studentModel.tojson());
     update();
   }
 
@@ -65,7 +53,6 @@ class StudentController extends GetxController {
     Get.back();
     update();
   }
-
 
   Stream<QuerySnapshot> searchStudents(String searchTerm) {
     return _studentRef
@@ -81,32 +68,3 @@ class StudentController extends GetxController {
     update();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   void updateStudent(String studentId, StudentModel studentModel) async {
-  //    _studentRef.doc(studentId).update(studentModel.tojson());
-  //     int index = studentsList.indexWhere((s) => s.id == studentId);
-  // if (index != -1) {
-  //   studentsList[index] = studentModel;
-  //   update();
-  // }}
-  // void getAllStudents() async {
-//     final QuerySnapshot<StudentModel> snapshot = await _studentRef.get();
-//     studentsList.assignAll(snapshot.docs.map((doc) => doc.data()).toList());
-//     update();
-//   }
